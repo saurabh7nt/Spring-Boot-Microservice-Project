@@ -46,5 +46,25 @@ services:
       - postgres
     restart: unless-stopped
 
+  order-service:
+    build:
+      context: .
+      dockerfile: order-service/Dockerfile
+    container_name: order-service
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/order_db
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: admin123
+      SPRING_JPA_OPEN_IN_VIEW: false
+      SERVICES_USER_SERVICE_URL: http://user-service:8081
+      SERVICES_MEDICINE_SERVICE_URL: http://medicine-service:8082
+    depends_on:
+      - postgres
+      - user-service
+      - medicine-service
+    restart: unless-stopped
+
 volumes:
   postgres_data:

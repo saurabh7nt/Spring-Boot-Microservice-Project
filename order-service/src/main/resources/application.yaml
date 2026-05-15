@@ -17,3 +17,16 @@ spring:
 
 server:
   port: 8083
+
+# External Service URLs
+services:
+  user-service:
+    url: http://localhost:8081
+  medicine-service:
+    url: http://localhost:8082
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,metrics,beans"
