@@ -96,7 +96,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional(readOnly = true)
     public Order getOrderById(Long id) {
-        return orderRepository.findById(id)
+        return orderRepository.findWithItemsById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Order", "id", id));
     }
 
@@ -122,7 +122,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order updateOrderStatus(Long id, String status) {
-        Order order = orderRepository.findById(id)
+        Order order = orderRepository.findWithItemsById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Order", "id", id));
 
         // Validate status transition
@@ -134,7 +134,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void cancelOrder(Long id) {
-        Order order = orderRepository.findById(id)
+        Order order = orderRepository.findWithItemsById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Order", "id", id));
 
         // Only allow cancellation of PENDING or CONFIRMED orders
@@ -224,10 +224,11 @@ public class OrderServiceImpl implements OrderService {
         // Define valid status transitions
         Map<String, List<String>> validTransitions = new HashMap<>();
         validTransitions.put("PENDING", List.of("CONFIRMED", "CANCELLED"));
-        validTransitions.put("CONFIRMED", List.of("SHIPPED", "CANCELLED"));
-        validTransitions.put("SHIPPED", List.of("DELIVERED"));
-        validTransitions.put("DELIVERED", List.of()); // No transitions from DELIVERED
-        validTransitions.put("CANCELLED", List.of()); // No transitions from CANCELLED
+        validTransitions.put("CONFIRMED", List.of("PROCESSING", "SHIPPED", "CANCELLED"));
+        validTransitions.put("PROCESSING", List.of("SHIPPED", "CANCELLED"));
+        validTransitions.put("SHIPPED", List.of("DELIVERED", "CANCELLED"));
+        validTransitions.put("DELIVERED", List.of());
+        validTransitions.put("CANCELLED", List.of());
 
         List<String> allowedTransitions = validTransitions.get(currentStatus);
         if (allowedTransitions == null || !allowedTransitions.contains(newStatus)) {
