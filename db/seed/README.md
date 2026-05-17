@@ -5,6 +5,7 @@ This folder contains git-tracked SQL seed files that can be used to quickly popu
 ## Current Seed Files
 
 - `medicines.sql` — inserts realistic medicine inventory records into the `medicines` table
+- `admin-user.sql` — inserts one default admin user into the `users` table if it does not already exist
 
 ## Prerequisites
 
@@ -28,15 +29,19 @@ cd backend
 docker compose up -d postgres
 ```
 
-### Copy the seed file into the container and run it
+### Copy the seed files into the container and run them
 ```bash
 docker cp db/seed/medicines.sql microservices-postgres:/tmp/medicines.sql
+docker cp db/seed/admin-user.sql microservices-postgres:/tmp/admin-user.sql
+
 docker exec -it microservices-postgres psql -U admin -d microservices_db -f /tmp/medicines.sql
+docker exec -it microservices-postgres psql -U admin -d microservices_db -f /tmp/admin-user.sql
 ```
 
 ### Verify inserted records
 ```bash
 docker exec -it microservices-postgres psql -U admin -d microservices_db -c "SELECT id, name, category, price, quantity, available FROM medicines ORDER BY id;"
+docker exec -it microservices-postgres psql -U admin -d microservices_db -c "SELECT id, username, email, role, active FROM users ORDER BY id;"
 ```
 
 ---
@@ -47,11 +52,13 @@ If PostgreSQL is running locally on your machine:
 
 ```bash
 psql -h localhost -U admin -d microservices_db -f backend/db/seed/medicines.sql
+psql -h localhost -U admin -d microservices_db -f backend/db/seed/admin-user.sql
 ```
 
 ### Verify inserted records
 ```bash
 psql -h localhost -U admin -d microservices_db -c "SELECT id, name, category, price, quantity, available FROM medicines ORDER BY id;"
+psql -h localhost -U admin -d microservices_db -c "SELECT id, username, email, role, active FROM users ORDER BY id;"
 ```
 
 ---
@@ -78,7 +85,7 @@ psql -h localhost -U admin -d microservices_db -f backend/db/seed/medicines.sql
 
 1. Start PostgreSQL
 2. Start the Spring services once so Hibernate creates tables
-3. Run the seed SQL file
+3. Run the seed SQL files
 4. Start or refresh the frontend
 
 Recommended order:
@@ -95,7 +102,18 @@ Then load seed data:
 ```bash
 cd /Users/saurabhtajane/Learn/capstone-project/backend
 docker cp db/seed/medicines.sql microservices-postgres:/tmp/medicines.sql
+docker cp db/seed/admin-user.sql microservices-postgres:/tmp/admin-user.sql
+
 docker exec -it microservices-postgres psql -U admin -d microservices_db -f /tmp/medicines.sql
+docker exec -it microservices-postgres psql -U admin -d microservices_db -f /tmp/admin-user.sql
+```
+
+Default admin seed credentials:
+```text
+username: admin
+email: admin@pharmacy.local
+password: Admin@123
+role: ADMIN
 ```
 
 ---
