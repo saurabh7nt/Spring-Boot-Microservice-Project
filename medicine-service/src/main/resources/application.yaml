@@ -2,7 +2,7 @@ spring:
   application:
     name: medicine-service
   datasource:
-    url: jdbc:postgresql://localhost:5432/medicine_db
+    url: jdbc:postgresql://localhost:5432/microservices_db
     username: admin
     password: admin123
     driver-class-name: org.postgresql.Driver
