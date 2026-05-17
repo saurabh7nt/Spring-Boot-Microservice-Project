@@ -22,7 +22,7 @@ services:
     ports:
       - "8081:8081"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/user_db
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/microservices_db
       SPRING_DATASOURCE_USERNAME: admin
       SPRING_DATASOURCE_PASSWORD: admin123
       SPRING_JPA_OPEN_IN_VIEW: false
@@ -38,7 +38,7 @@ services:
     ports:
       - "8082:8082"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/medicine_db
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/microservices_db
       SPRING_DATASOURCE_USERNAME: admin
       SPRING_DATASOURCE_PASSWORD: admin123
       SPRING_JPA_OPEN_IN_VIEW: false
@@ -54,7 +54,7 @@ services:
     ports:
       - "8083:8083"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/order_db
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/microservices_db
       SPRING_DATASOURCE_USERNAME: admin
       SPRING_DATASOURCE_PASSWORD: admin123
       SPRING_JPA_OPEN_IN_VIEW: false
